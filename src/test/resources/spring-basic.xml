@@ -80,5 +80,10 @@
 	表示使用CGLib动态代理技术织入增强。不过即使proxy-target-class设置为false，如果目标类没有声明接口，
 	则spring将自动使用CGLib动态代理。@see http://blog.chinaunix.net/uid-11898547-id-3417894.html -->
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
+	<util:map id="iMap" map-class="java.util.HashMap" key-type="java.lang.String" value-type="java.lang.Integer">
+        <entry key="u1" value="1"/>
+        <entry key="u2" value="2"/>
+    </util:map>
     
 </beans>

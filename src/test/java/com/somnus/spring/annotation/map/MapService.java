@@ -4,10 +4,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.somnus.spring.annotation.autowired.HumanService;
 
 @Service
 public class MapService {
@@ -17,12 +14,9 @@ public class MapService {
 	@Resource
 	private Map<String,Integer> iMap;
 	
-	@Autowired
-	private Map<String,HumanService> map;
 	
 	public void say() {
 		System.out.println(iMap);
-		System.out.println(map);
 	}
 	
 	

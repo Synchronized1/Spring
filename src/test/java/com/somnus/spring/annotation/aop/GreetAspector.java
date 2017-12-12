@@ -3,6 +3,7 @@ package com.somnus.spring.annotation.aop;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -14,6 +15,8 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.DeclareParents;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 
 @Aspect  
@@ -80,21 +83,25 @@ public class GreetAspector {
     public Object around(ProceedingJoinPoint point) throws Throwable {
         Object result = null;
         System.out.println("target:" + point.getTarget());
+        
         Method method = ((MethodSignature) point.getSignature()).getMethod();
-        System.out.println(method.getName());
-        String methodName = point.getSignature().getName();
+        ParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
+        // 获得方法的参数名称
+        String [] parameterNames = discoverer.getParameterNames(method); 
+        System.out.println("方法名称:" + method.getName() + ">>方法的参数名称:" + ArrayUtils.toString(parameterNames));
+        
         //执行目标方法
         try {
             //前置通知
-            System.out.println("ARROUND-->The method 【" + methodName + "】 begins with 【" + Arrays.asList(point.getArgs()) +"】");
+            System.out.println("ARROUND-->The method 【" + point.getSignature().getName() + "】 begins with 【" + Arrays.asList(point.getArgs()) +"】");
             result = point.proceed();
         } catch (Throwable e) {
             //后置异常通知【在方法出现异常时会执行的代码】
-            System.out.println("ARROUND-->The method 【" + methodName + "】 occurs expection : 【" + e +"】");
+            System.out.println("ARROUND-->The method 【" + point.getSignature().getName() + "】 occurs expection : 【" + e +"】");
             throw new RuntimeException(e);
         }
         //后置返回通知【方法正常结束后执行的代码，不包括抛出异常的情况】
-        System.out.println("ARROUND-->The method 【" + methodName + "】 return with 【" + result +"】");
+        System.out.println("ARROUND-->The method 【" + point.getSignature().getName() + "】 return with 【" + result +"】");
         return result;
     }
     
